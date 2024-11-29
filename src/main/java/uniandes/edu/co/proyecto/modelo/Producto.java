@@ -3,11 +3,16 @@ package uniandes.edu.co.proyecto.modelo;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.ToString;
+
+@Document(collection = "productos") // Nombre de la colección en MongoDB
+@ToString
 
 public class Producto {
-
     @Id
-    private Integer id;
+    private String id;
     private String nombre;
     private int costoBodega;
     private int precioUnitario;
@@ -21,12 +26,13 @@ public class Producto {
     private String categoriaId; // ID de la categoría asociada
 
     // Constructor vacío (necesario para Spring Data)
-    public Producto() {}
+    public Producto() {
+    }
 
     // Constructor con parámetros
-    public Producto(Integer id, String nombre, int costoBodega, int precioUnitario, String presentación, int cantidad,
-                    String unidadMedida, double volumenEmpaque, double pesoEmpaque, Date fechaExpiración,
-                    String codigoBarras, String categoriaId) {
+    public Producto(String id, String nombre, int costoBodega, int precioUnitario, String presentación, int cantidad,
+            String unidadMedida, double volumenEmpaque, double pesoEmpaque, Date fechaExpiración,
+            String codigoBarras, String categoriaId) {
         this.id = id;
         this.nombre = nombre;
         this.costoBodega = costoBodega;
@@ -42,11 +48,11 @@ public class Producto {
     }
 
     // Getters y Setters
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
