@@ -26,16 +26,14 @@ public class ProductoRepositoryCustom {
     public Document obtenerProductoConCategoria(String idOrNombre) {
         List<Document> pipeline = List.of(
             // Filtrar por ID o nombre del producto
-            new Document("$match", new Document("$or", List.of(
-                new Document("_id", idOrNombre),
-                
+            new Document("$match", new Document(
                 new Document("nombre", idOrNombre)
-            ))),
+            )),
             // Realizar el lookup para traer la categoría asociada
             new Document("$lookup", new Document()
                 .append("from", "categorias") // Nombre de la colección de categorías
-                .append("localField", "categoriaId") // Campo en el producto que se une con el ID de la categoría
-                .append("foreignField", new ObjectId("_id")) // Campo en la categoría que coincide con el localField
+                .append("localField", "categoriaNombre") // Campo en el producto que se une con el ID de la categoría
+                .append("foreignField", "nombre") // Campo en la categoría que coincide con el localField
                 .append("as", "categoria") // Nombre del campo que contendrá la categoría embebida
             ),
             // Descomponer el array de categoría (opcional, si se espera un único resultado)

@@ -23,7 +23,7 @@ public class Producto {
     private double pesoEmpaque; // Peso del empaque en kg o g
     private Date fechaExpiración; // Fecha de expiración del producto
     private String codigoBarras; // Código de barras único del producto
-    private String categoriaId; // ID de la categoría asociada
+    private String categoriaNombre; // ID de la categoría asociada
 
     // Constructor vacío (necesario para Spring Data)
     public Producto() {
@@ -32,7 +32,7 @@ public class Producto {
     // Constructor con parámetros
     public Producto(String id, String nombre, int costoBodega, int precioUnitario, String presentación, int cantidad,
             String unidadMedida, double volumenEmpaque, double pesoEmpaque, Date fechaExpiración,
-            String codigoBarras, String categoriaId) {
+            String codigoBarras, String categoriaNombre) {
         this.id = id;
         this.nombre = nombre;
         this.costoBodega = costoBodega;
@@ -44,7 +44,7 @@ public class Producto {
         this.pesoEmpaque = pesoEmpaque;
         this.fechaExpiración = fechaExpiración;
         this.codigoBarras = codigoBarras;
-        this.categoriaId = categoriaId;
+        this.categoriaNombre = categoriaNombre;
     }
 
     // Getters y Setters
@@ -136,20 +136,13 @@ public class Producto {
         this.codigoBarras = codigoBarras;
     }
 
-    public String getCategoriaId() {
-        return categoriaId;
+    public String getCategoriaNombre() {
+        return categoriaNombre;
     }
 
-    public void setCategoriaId(String categoriaId) {
-        this.categoriaId = categoriaId;
+    public void setCategoriaNombre(String categoriaNombre) {
+        this.categoriaNombre = categoriaNombre;
     }
 
-    @Override
-    public String toString() {
-        return "Producto [id=" + id + ", nombre=" + nombre + ", costoBodega=" + costoBodega + ", precioUnitario="
-                + precioUnitario + ", presentación=" + presentación + ", cantidad=" + cantidad + ", unidadMedida="
-                + unidadMedida + ", volumenEmpaque=" + volumenEmpaque + ", pesoEmpaque=" + pesoEmpaque
-                + ", fechaExpiración=" + fechaExpiración + ", codigoBarras=" + codigoBarras + ", categoriaId="
-                + categoriaId + "]";
-    }
+    
 }

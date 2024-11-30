@@ -15,16 +15,17 @@ public interface CategoriaRepository extends MongoRepository<Categoria, String> 
 
    
     // Crear una nueva categoria
-    @Query("{ $insert: { _id: ?0, nombre: ?1, descripcion: ?2, caracteristicas_almacenamiento: ?3, lista_Id_productos: ?4 } }")
-    void insertarCategoria(String id, String nombre, String descripcion, String caracteristicas_almacenamiento, List<String> lista_Id_productos);
+    @Query("{ $insert: {nombre: ?0, descripcion: ?1, caracteristicas_almacenamiento: ?2, lista_Id_productos: ?3 } }")
+    void insertarCategoria(String nombre, String descripcion, String caracteristicas_almacenamiento, List<String> lista_Id_productos);
 
     // Consultar categoría por ID
-    @Query("{'_id': ?0}")
-    Optional<Categoria> buscarPorId(String id);
-
-    // Consultar categoría por nombre
     @Query("{'nombre': ?0}")
     Optional<Categoria> buscarPorNombre(String nombre);
+    
+    @Query("{ 'nombre': ?0 }")
+    Optional<Categoria> findByNombre(String nombre);
+
+    
 
 
 

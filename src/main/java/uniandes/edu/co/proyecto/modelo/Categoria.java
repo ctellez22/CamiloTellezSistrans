@@ -13,8 +13,6 @@ import lombok.ToString;
 public class Categoria {
 
     @Id
-    private String id; // Identificador único de la categoría
-    
     private String nombre; // Nombre de la categoría
     private String descripcion; // Descripción de la categoría
     private String caracteristicasAlmacenamiento; // Características específicas para el almacenamiento
@@ -23,21 +21,14 @@ public class Categoria {
     public Categoria() {}
 
     // Constructor con parámetros
-    public Categoria(String id, String nombre, String descripcion, String caracteristicasAlmacenamiento) {
-        this.id = id;
+    public Categoria(String nombre, String descripcion, String caracteristicasAlmacenamiento) {
+
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.caracteristicasAlmacenamiento = caracteristicasAlmacenamiento;
     }
 
-    // Getters y Setters
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+   
 
     public String getNombre() {
         return nombre;
