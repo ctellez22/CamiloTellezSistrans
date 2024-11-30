@@ -2,12 +2,14 @@ package uniandes.edu.co.proyecto.controller;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import uniandes.edu.co.proyecto.modelo.Categoria;
 import uniandes.edu.co.proyecto.modelo.Producto;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uniandes.edu.co.proyecto.repository.CategoriaRepository;
+import uniandes.edu.co.proyecto.repository.FiltroRepository;
 import uniandes.edu.co.proyecto.repository.ProductoRepository;
 import uniandes.edu.co.proyecto.repository.ProductoRepositoryCustom;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -44,6 +45,12 @@ public class ProductoController {
 
     @Autowired
     private ProductoRepositoryCustom productoRepositoryCustom;
+    
+
+    @Autowired
+    private FiltroRepository filtroRepository;
+
+    
     
 
     // Crear un nuevo producto
@@ -147,6 +154,23 @@ public ResponseEntity<String> actualizarProducto(@PathVariable String id, @Reque
                 .body("Error al actualizar el producto: " + e.getMessage());
     }
 }
+
+
+
+
+    @GetMapping("/filtro")
+    public ResponseEntity<List<Document>> obtenerProductos(
+            @RequestParam(required = false) Integer rangoPrecioMin,
+            @RequestParam(required = false) Integer rangoPrecioMax,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaVencimiento,
+            @RequestParam(required = false) Boolean vencimientoPosterior,
+            @RequestParam(required = false) String categoria) {
+
+        List<Document> productos = filtroRepository.obtenerProductosPorCaracteristicas(
+                rangoPrecioMin, rangoPrecioMax, fechaVencimiento, vencimientoPosterior, categoria);
+
+        return ResponseEntity.ok(productos);
+    }
 
 
 
