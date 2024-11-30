@@ -1,5 +1,6 @@
 package uniandes.edu.co.proyecto.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -103,9 +106,51 @@ public ResponseEntity<?> obtenerProductoConCategoria(@RequestParam String idOrNo
         errorResponse.put("idOrNombre", idOrNombre);
         return ResponseEntity.status(500).body(errorResponse);
     }
+    }
+
+
+
+
+    @PutMapping("/update/{id}")
+public ResponseEntity<String> actualizarProducto(@PathVariable String id, @RequestBody Map<String, Object> datos) {
+    try {
+        // Verificar si el producto existe en la base de datos
+        Optional<Producto> productoExistente = productoRepository.findById(id);
+        if (!productoExistente.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Producto con ID " + id + " no encontrado.");
+        }
+
+        // Extraer datos del cuerpo de la solicitud
+        String nombre = (String) datos.get("nombre");
+        int costoBodega = (int) datos.get("costoBodega");
+        int precioUnitario = (int) datos.get("precioUnitario");
+        String presentación = (String) datos.get("presentación");
+        int cantidad = (int) datos.get("cantidad");
+        String unidadMedida = (String) datos.get("unidadMedida");
+        double volumenEmpaque = (double) datos.get("volumenEmpaque");
+        double pesoEmpaque = (double) datos.get("pesoEmpaque");
+        Date fechaExpiración = new Date((long) datos.get("fechaExpiración")); // Convertir de timestamp a Date
+        String codigoBarras = (String) datos.get("codigoBarras");
+        String categoriaNombre = (String) datos.get("categoriaNombre");
+
+        // Llamar al método del repositorio para actualizar el producto
+        productoRepository.actualizarProducto(
+                id, nombre, costoBodega, precioUnitario, presentación,
+                cantidad, unidadMedida, volumenEmpaque, pesoEmpaque,
+                fechaExpiración, codigoBarras, categoriaNombre
+        );
+
+        return ResponseEntity.ok("Producto actualizado exitosamente");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al actualizar el producto: " + e.getMessage());
+    }
 }
 
-    }
+
+
+}
 
     
 
