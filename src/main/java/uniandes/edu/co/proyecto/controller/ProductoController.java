@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -70,33 +71,43 @@ public ResponseEntity<String> insertarProducto(@RequestBody Producto producto) {
     }
 }
     @GetMapping("/producto")
-    public ResponseEntity<?> obtenerProductoConCategoria(@RequestParam String idOrNombre) {
-        logger.info("Solicitud recibida para obtener producto con ID o nombre: {}", idOrNombre);
-        try {
-            Document productoConCategoria = productoRepositoryCustom.obtenerProductoConCategoria(idOrNombre);
-
-            if (productoConCategoria != null) {
-                logger.info("Producto encontrado: {}", productoConCategoria.toJson());
-                return ResponseEntity.ok(productoConCategoria);
-            } else {
-                logger.warn("Producto no encontrado para ID o nombre: {}", idOrNombre);
-                Map<String, Object> errorResponse = new HashMap<>();
-                errorResponse.put("error", "Producto no encontrado");
-                errorResponse.put("idOrNombre", idOrNombre);
-                errorResponse.put("mensaje", "No se encontró un producto con el ID o nombre proporcionado.");
-                return ResponseEntity.status(404).body(errorResponse);
-            }
-        } catch (Exception e) {
-            logger.error("Error al procesar la solicitud para ID o nombre: {}", idOrNombre, e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Error interno del servidor");
-            errorResponse.put("detalle", e.getMessage());
-            errorResponse.put("idOrNombre", idOrNombre);
-            return ResponseEntity.status(500).body(errorResponse);
+public ResponseEntity<?> obtenerProductoConCategoria(@RequestParam String idOrNombre) {
+    logger.info("Solicitud recibida para obtener producto con ID o nombre: {}", idOrNombre);
+    try {
+        // Determinar si el valor proporcionado es un ObjectId válido
+        Document productoConCategoria;
+        if (ObjectId.isValid(idOrNombre)) {
+            logger.info("El parámetro es un ObjectId válido. Buscando por _id.");
+            productoConCategoria = productoRepositoryCustom.obtenerProductoConCategoriaPorId(new ObjectId(idOrNombre));
+        } else {
+            logger.info("El parámetro no es un ObjectId válido. Buscando por nombre.");
+            productoConCategoria = productoRepositoryCustom.obtenerProductoConCategoriaPorNombre(idOrNombre);
         }
+
+        if (productoConCategoria != null) {
+            logger.info("Producto encontrado: {}", productoConCategoria.toJson());
+            return ResponseEntity.ok(productoConCategoria);
+        } else {
+            logger.warn("Producto no encontrado para ID o nombre: {}", idOrNombre);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Producto no encontrado");
+            errorResponse.put("idOrNombre", idOrNombre);
+            errorResponse.put("mensaje", "No se encontró un producto con el ID o nombre proporcionado.");
+            return ResponseEntity.status(404).body(errorResponse);
+        }
+    } catch (Exception e) {
+        logger.error("Error al procesar la solicitud para ID o nombre: {}", idOrNombre, e);
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Error interno del servidor");
+        errorResponse.put("detalle", e.getMessage());
+        errorResponse.put("idOrNombre", idOrNombre);
+        return ResponseEntity.status(500).body(errorResponse);
     }
+}
 
     }
+
+    
 
 
 
