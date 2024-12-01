@@ -1,6 +1,7 @@
 package uniandes.edu.co.proyecto.controller;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
